@@ -1,0 +1,13 @@
+Рест апи по Битрикс24, метод получения инфо по сделке: https://apidocs.bitrix24.ru/api-reference/crm/deals/crm-deal-list.html
+ID воронки: https://crm.grandmed.ru/crm/deal/kanban/category/21/
+
+Стадия сделки STAGE_ID = Контроль записи на прием. "STATUS_ID": "C21:PREPARATION".
+Сделка. Направление (Лиды). Поле пользовательское. ID поля UF_CRM_1632131563786 Поле списочное. Список не множественный.
+Сделка. Поле Врач (сотрудник портала): UF_CRM_1680855473. Тип поля - привязка к пользователю CRM. Т.е. врач, к которому сделана запись пациента.
+Сделка. дата создания. Тип поля - дата id поля - DATE_CREATE
+
+Вебхук для передачи новых пациентов с qMS в Битрикс через воронку импорта на автоматизации (сначала создается сделка, а потом из нее контакт с полями).
+То, что в кавычках нужно заменить полями из qMs: https://crm.grandmed.ru/rest/27036/pnkrzq23s3h1r71c/crm.deal.add.json?fields[CATEGORY_ID]=63&fields[STATUS_ID]=NEW&fields[UF_CRM_64B7A1FD1D5BB]="Фамилия"&fields[UF_CRM_NAME]="Имя"&fields[UF_CRM_64B7A1FEF374B]="Отчество"&fields[UF_CRM_66582450DADD8]="Телефон"&fields[UF_CRM_1744898823]="Почта (email)"&fields[UF_CRM_1744898975]="Рег. номер"&fields[UF_CRM_1669636928319]="Пол (Мужской/Женский)"&fields[UF_CRM_1671203152488]="Дата рождения"
+
+По ID сделки можно забрать нужную информацию, в том числе ID контакта: https://apidocs.bitrix24.ru/api-reference/crm/deals/crm-deal-get.html
+По ID контакта можем забрать поля контакта (его рег. номер): https://apidocs.bitrix24.ru/api-reference/crm/contacts/crm-contact-get.html
