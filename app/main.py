@@ -1,4 +1,4 @@
-from app.models import init_tables
+from models import init_tables
 
 
 if __name__ == '__main__':
