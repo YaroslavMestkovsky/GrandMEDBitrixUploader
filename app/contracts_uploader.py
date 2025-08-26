@@ -5,8 +5,8 @@ import logging
 import requests
 
 from datetime import timedelta
-from bitrix_to_db_relations import DEALS, CONTRACTS
-from models import get_session, Contract
+from app.bitrix_to_db_relations import DEALS, CONTRACTS
+from app.models import get_session, Contract
 
 
 db_confing = "bitrix.conf"
