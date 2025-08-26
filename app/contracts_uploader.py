@@ -5,7 +5,7 @@ import logging
 import requests
 
 from datetime import timedelta
-from bitrix_to_db_relations import DEALS, CONTRACTS
+from bitrix_to_db_relations import CONTRACTS
 from models import get_session, Contract
 
 
