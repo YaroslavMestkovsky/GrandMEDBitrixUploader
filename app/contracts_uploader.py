@@ -9,7 +9,7 @@ from bitrix_to_db_relations import DEALS, CONTRACTS
 from models import get_session, Contract
 
 
-db_confing = "./bitrix.conf"
+db_confing = "app/bitrix.conf"
 config = configparser.ConfigParser()
 config.read(db_confing)
 
