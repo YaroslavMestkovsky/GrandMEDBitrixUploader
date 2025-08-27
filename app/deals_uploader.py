@@ -88,7 +88,7 @@ class DealsUploader:
 
             if _next:
                 self.DATA["start"] = _next
-                print(f"\rЗагрузка и обработка контрактов: {_next}", end="", flush=True)
+                print(f"\rЗагрузка и обработка сделок: {_next}", end="", flush=True)
             else:
                 print()
                 break
