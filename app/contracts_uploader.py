@@ -4,6 +4,7 @@ import json
 import logging
 import requests
 
+from requests.exceptions import JSONDecodeError as RequestsJSONDecodeError
 from datetime import timedelta
 from bitrix_to_db_relations import CONTRACTS
 from models import get_session, Contract
@@ -72,6 +73,8 @@ class ContractsUploader:
         self.msg(f'Загрузка окончена.\n\tСоздано записей: {created_count}\n\tОбновлено записей: {updated_count}\n\n', need_time=False)
 
     def _process_contracts(self):
+        errors_count = 0
+
         while True:
             response = requests.post(
                 url=self.URL,
@@ -79,16 +82,27 @@ class ContractsUploader:
                 data=json.dumps(self.DATA),
             )
 
-            data = response.json()
+            try:
+                data = response.json()
+            except RequestsJSONDecodeError:
+                logging.warning('Ошибка декодировки ответа из Bitrix.')
+                errors_count += 1
+
+                if errors_count > 10:
+                    logging.error('Что-то не так с АПИ Bitrix.')
+                    break
+                else:
+                    continue
 
             for contract in data.get("result", []):
                 yield self._relate_contract_to_model_fields(contract)
 
             _next = data.get("next")
+            _total = data.get("total")
 
             if _next:
                 self.DATA["start"] = _next
-                print(f"\rЗагрузка и обработка контрактов: {_next}", end="", flush=True)
+                print(f"\rЗагрузка и обработка контрактов: {_next}/{_total}", end="", flush=True)
             else:
                 print()
                 break

@@ -90,6 +90,7 @@ class DealsUploader:
 
                 if errors_count > 10:
                     logging.error('Что-то не так с АПИ Bitrix.')
+                    print()
                     break
                 else:
                     continue
@@ -98,10 +99,11 @@ class DealsUploader:
                 yield self._relate_deal_to_model_fields(deal)
 
             _next = data.get("next")
+            _total = data.get("total")
 
             if _next:
                 self.DATA["start"] = _next
-                print(f"\rЗагрузка и обработка сделок: {_next}", end="", flush=True)
+                print(f"\rЗагрузка и обработка сделок: {_next}/{_total}", end="", flush=True)
             else:
                 print()
                 break
