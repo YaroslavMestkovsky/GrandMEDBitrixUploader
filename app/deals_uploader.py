@@ -4,6 +4,7 @@ import json
 import logging
 import requests
 
+from requests.exceptions import JSONDecodeError as RequestsJSONDecodeError
 from datetime import timedelta
 from bitrix_to_db_relations import DEALS
 from models import get_session, Deal
@@ -72,6 +73,8 @@ class DealsUploader:
         self.session.commit()
 
     def _process_deals(self):
+        errors_count = 0
+
         while True:
             response = requests.post(
                 url=self.URL,
@@ -79,7 +82,17 @@ class DealsUploader:
                 data=json.dumps(self.DATA),
             )
 
-            data = response.json()
+            try:
+                data = response.json()
+            except RequestsJSONDecodeError:
+                logging.warning('Ошибка декодировки ответа из Bitrix.')
+                errors_count += 1
+
+                if errors_count > 10:
+                    logging.error('Что-то не так с АПИ Bitrix.')
+                    break
+                else:
+                    continue
 
             for deal in data.get("result", []):
                 yield self._relate_deal_to_model_fields(deal)
