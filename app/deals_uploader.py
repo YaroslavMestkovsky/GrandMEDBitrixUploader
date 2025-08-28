@@ -52,6 +52,7 @@ class DealsUploader:
 
         created_count = 0
         updated_count = 0
+        current_count = 0
 
         start_date = self._get_start_date()
         self.msg(f"Начало загрузки сделок: {start_date}.")
@@ -66,6 +67,13 @@ class DealsUploader:
                 created_count += 1
             else:
                 updated_count += 1
+
+            if current_count % 1000 == 0:
+                self.session.add_all(deals)
+                self.session.commit()
+
+                deals = []
+                current_count = 0
 
         self.msg(f'Загрузка окончена.\n\tСоздано записей: {created_count}\n\tОбновлено записей: {updated_count}\n\n', need_time=False)
 

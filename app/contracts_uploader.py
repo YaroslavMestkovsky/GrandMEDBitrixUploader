@@ -52,6 +52,7 @@ class ContractsUploader:
 
         created_count = 0
         updated_count = 0
+        current_count = 0
 
         start_date = self._get_start_date()
         self.msg(f"Начало загрузки контрактов: {start_date}.")
@@ -66,6 +67,13 @@ class ContractsUploader:
                 created_count += 1
             else:
                 updated_count += 1
+
+            if current_count % 1000 == 0:
+                self.session.add_all(contracts)
+                self.session.commit()
+
+                contracts = []
+                current_count = 0
 
         self.session.add_all(contracts)
         self.session.commit()
